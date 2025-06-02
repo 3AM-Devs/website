@@ -1,68 +1,54 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --background: 225 47% 4%;
+    --foreground: 156 84% 60%;
+    --card: 225 47% 6%;
+    --card-foreground: 156 84% 60%;
+    --popover: 225 47% 4%;
+    --popover-foreground: 156 84% 60%;
+    --primary: 156 84% 39%;
+    --primary-foreground: 225 47% 4%;
+    --secondary: 269 97% 85%;
+    --secondary-foreground: 225 47% 4%;
+    --muted: 225 47% 10%;
+    --muted-foreground: 156 84% 40%;
+    --accent: 269 97% 85%;
+    --accent-foreground: 225 47% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 225 47% 4%;
+    --border: 225 47% 10%;
+    --input: 225 47% 10%;
+    --ring: 156 84% 39%;
   }
-  a:hover {
-    color: #747bff;
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-shadow: 0 0 5px hsl(var(--foreground) / 0.5);
   }
-  button {
-    background-color: #f9f9f9;
+
+  ::selection {
+    @apply bg-primary/30 text-foreground;
   }
+}
+
+@layer utilities {
+  .animated-underline {
+    @apply relative;
+  }
+  .animated-underline::after {
+    @apply absolute bottom-0 left-0 h-[2px] w-0 bg-primary shadow-[0_0_10px_hsl(var(--primary))] transition-all duration-300;
+    content: "";
+  }
+  .animated-underline:hover::after {
+    @apply w-full;
+  }
+}
+
+.glow-effect {
+  box-shadow: 0 0 15px hsl(var(--primary) / 0.5);
 }
