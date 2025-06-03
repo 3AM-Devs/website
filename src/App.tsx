@@ -1,8 +1,7 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout';
-import Home from './pages/Home.tsx';
-
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import About from "./pages/About.tsx";
+import Home from "./pages/Home.tsx";
 
 function App() {
   return (
@@ -10,6 +9,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Layout>
     </Router>
