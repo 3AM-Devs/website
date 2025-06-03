@@ -17,6 +17,22 @@ export interface TeamMember {
   };
 }
 
+export interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  link: string;
+  github?: string;
+  stats: {
+    stars: number;
+    forks: number;
+    issues: number;
+    watchers: number;
+  };
+}
+
 export interface NavItem {
   title: string;
   href: string;
