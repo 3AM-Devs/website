@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Github } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { navigationItems } from '../../data/navigation.tsx';
+import { navigationItems } from '../../data/navigation.ts';
 import Container from '../ui/Container.tsx';
 import Button from '../ui/Button.tsx';
 
