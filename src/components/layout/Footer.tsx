@@ -1,6 +1,8 @@
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 import React from "react";
+
 import Container from "../ui/Container.tsx";
+import NewsletterForm from "./NewsletterForm";
 
 const Footer: React.FC = () => {
   return (
@@ -77,7 +79,7 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="soon"
+                  href="#"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Documentation
@@ -93,7 +95,7 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="soon"
+                  href="#"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Meetups
@@ -138,20 +140,13 @@ const Footer: React.FC = () => {
               </a>
             </div>
 
-            {/* TODO: manage mailing list */}
             <div className="mt-4">
               <p className="text-sm text-muted-foreground">
                 Subscribe to our newsletter for updates
               </p>
-              <div className="mt-2 flex">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="bg-muted text-foreground rounded-l-md px-4 py-2 w-full focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <button className="bg-primary text-primary-foreground px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors">
-                  Subscribe
-                </button>
+              <div className="mt-2">
+                {/* Newsletter form integrated with Mailchimp */}
+                <NewsletterForm />
               </div>
             </div>
           </div>
