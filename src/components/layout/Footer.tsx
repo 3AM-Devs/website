@@ -1,8 +1,45 @@
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+
 import Container from "../ui/Container.tsx";
 
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+
+import { auth } from "../../types/firebaseConfig.ts";
+
 const Footer: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const generateRandomPassword = (): string => {
+    const array = new Uint8Array(16);
+    crypto.getRandomValues(array);
+    return Array.from(array)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  };
+
+  const handleSignUp = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        generateRandomPassword()
+      );
+      await sendEmailVerification(userCredential.user);
+      setMessage("Verification email sent! Please check your inbox.");
+    } catch (error: any) {
+      if (error.message.includes("email-already-in-use")) {
+        setMessage(`Error: Email Already in use!`);
+      } else {
+        setMessage(`An Error Occurred: ${error.message || "Unknown error"}`);
+      }
+    }
+  };
   return (
     <footer className="bg-card text-card-foreground border-t border-border py-12">
       <Container>
@@ -138,7 +175,6 @@ const Footer: React.FC = () => {
               </a>
             </div>
 
-            {/* TODO: manage mailing list */}
             <div className="mt-4">
               <p className="text-sm text-muted-foreground">
                 Subscribe to our newsletter for updates
@@ -146,13 +182,38 @@ const Footer: React.FC = () => {
               <div className="mt-2 flex">
                 <input
                   type="email"
+                  value={email}
                   placeholder="Enter your email"
                   className="bg-muted text-foreground rounded-l-md px-4 py-2 w-full focus:outline-none focus:ring-1 focus:ring-primary"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                <button className="bg-primary text-primary-foreground px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors">
-                  Subscribe
+                <button
+                  className={`px-4 py-2 rounded-r-md transition-colors ${
+                    loading
+                      ? "bg-primary/80 text-primary-foreground"
+                      : "bg-primary text-primary-foreground hover:bg-primary/90"
+                  }`}
+                  onClick={async () => {
+                    setLoading(true);
+                    await handleSignUp();
+                    setLoading(false);
+                  }}
+                  disabled={loading || message.includes("inbox")}
+                >
+                  {loading ? "Subscribing..." : "Subscribe"}
                 </button>
               </div>
+              {message && (
+                <p
+                  className={`mt-2 text-sm ${
+                    message.includes("Error")
+                      ? "text-destructive"
+                      : "text-green-500"
+                  } transition-opacity`}
+                >
+                  {message}
+                </p>
+              )}
             </div>
           </div>
         </div>
