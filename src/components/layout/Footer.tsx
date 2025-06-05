@@ -15,18 +15,26 @@ const Footer: React.FC = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const generateRandomPassword = (): string => {
+    const array = new Uint8Array(16);
+    crypto.getRandomValues(array);
+    return Array.from(array)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  };
+
   const handleSignUp = async () => {
     try {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        "supersecretpassword"
+        generateRandomPassword()
       );
       await sendEmailVerification(userCredential.user);
       setMessage("Verification email sent! Please check your inbox.");
     } catch (error: any) {
-      setMessage(`An Error Occured`);
+      setMessage(`An Error Occurred`);
     } finally {
       setLoading(false);
     }
