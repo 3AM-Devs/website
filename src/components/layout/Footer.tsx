@@ -33,7 +33,11 @@ const Footer: React.FC = () => {
       await sendEmailVerification(userCredential.user);
       setMessage("Verification email sent! Please check your inbox.");
     } catch (error: any) {
-      setMessage(`An Error Occurred: ${error.message || "Unknown error"}`);
+      if (error.message.includes("email-already-in-use")) {
+        setMessage(`Error: Email Already in use!`);
+      } else {
+        setMessage(`An Error Occurred: ${error.message || "Unknown error"}`);
+      }
     }
   };
   return (
@@ -194,9 +198,9 @@ const Footer: React.FC = () => {
                     await handleSignUp();
                     setLoading(false);
                   }}
-                  disabled={!!message || !email}
+                  disabled={loading || message.includes("inbox")}
                 >
-                  {loading?"Subscribing...":"Subscribe"}
+                  {loading ? "Subscribing..." : "Subscribe"}
                 </button>
               </div>
               {message && (
