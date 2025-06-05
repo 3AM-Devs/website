@@ -1,8 +1,32 @@
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+
 import Container from "../ui/Container.tsx";
 
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+
+import { auth } from "../../types/firebaseConfig.ts";
+
 const Footer: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSignUp = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        "supersecretpassword"
+      );
+      await sendEmailVerification(userCredential.user);
+      setMessage("Verification email sent! Please check your inbox.");
+    } catch (error: any) {
+      setMessage(`An Error Occured`);
+    }
+  };
   return (
     <footer className="bg-card text-card-foreground border-t border-border py-12">
       <Container>
@@ -138,21 +162,30 @@ const Footer: React.FC = () => {
               </a>
             </div>
 
-            {/* TODO: manage mailing list */}
             <div className="mt-4">
               <p className="text-sm text-muted-foreground">
-                Subscribe to our newsletter for updates
+              Subscribe to our newsletter for updates
               </p>
               <div className="mt-2 flex">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="bg-muted text-foreground rounded-l-md px-4 py-2 w-full focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <button className="bg-primary text-primary-foreground px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors">
-                  Subscribe
-                </button>
+              <input
+                type="email"
+                value={email}
+                placeholder="Enter your email"
+                className="bg-muted text-foreground rounded-l-md px-4 py-2 w-full focus:outline-none focus:ring-1 focus:ring-primary"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <button
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors"
+                onClick={handleSignUp}
+              >
+                Subscribe
+              </button>
               </div>
+              {message && (
+              <p className={`mt-2 text-sm ${message.includes("Error") ? "text-destructive" : "text-green-500"} transition-opacity`}>
+                {message}
+              </p>
+              )}
             </div>
           </div>
         </div>
