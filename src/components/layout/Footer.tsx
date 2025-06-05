@@ -25,7 +25,6 @@ const Footer: React.FC = () => {
 
   const handleSignUp = async () => {
     try {
-      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -34,9 +33,7 @@ const Footer: React.FC = () => {
       await sendEmailVerification(userCredential.user);
       setMessage("Verification email sent! Please check your inbox.");
     } catch (error: any) {
-      setMessage(`An Error Occurred`);
-    } finally {
-      setLoading(false);
+      setMessage(`An Error Occurred: ${error.message || "Unknown error"}`);
     }
   };
   return (
@@ -193,16 +190,13 @@ const Footer: React.FC = () => {
                       : "bg-primary text-primary-foreground hover:bg-primary/90"
                   }`}
                   onClick={async () => {
-                    setMessage(""); // Clear previous messages
-                    const originalText = "Subscribe";
-                    const button = document.activeElement as HTMLButtonElement;
-                    if (button) button.textContent = "Subscribing...";
+                    setLoading(true);
                     await handleSignUp();
-                    if (button) button.textContent = originalText;
+                    setLoading(false);
                   }}
                   disabled={!!message || !email}
                 >
-                  Subscribe
+                  {loading?"Subscribing...":"Subscribe"}
                 </button>
               </div>
               {message && (
