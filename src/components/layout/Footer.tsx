@@ -13,9 +13,11 @@ import { auth } from "../../types/firebaseConfig.ts";
 const Footer: React.FC = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignUp = async () => {
     try {
+      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -25,6 +27,8 @@ const Footer: React.FC = () => {
       setMessage("Verification email sent! Please check your inbox.");
     } catch (error: any) {
       setMessage(`An Error Occured`);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -164,37 +168,45 @@ const Footer: React.FC = () => {
 
             <div className="mt-4">
               <p className="text-sm text-muted-foreground">
-              Subscribe to our newsletter for updates
+                Subscribe to our newsletter for updates
               </p>
               <div className="mt-2 flex">
-              <input
-                type="email"
-                value={email}
-                placeholder="Enter your email"
-                className="bg-muted text-foreground rounded-l-md px-4 py-2 w-full focus:outline-none focus:ring-1 focus:ring-primary"
-                onChange={(e) => setEmail(e.target.value)}
-              />
+                <input
+                  type="email"
+                  value={email}
+                  placeholder="Enter your email"
+                  className="bg-muted text-foreground rounded-l-md px-4 py-2 w-full focus:outline-none focus:ring-1 focus:ring-primary"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                 <button
-                className={`px-4 py-2 rounded-r-md transition-colors ${
-                  message ? "bg-primary/80 text-primary-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90"
-                }`}
-                onClick={async () => {
-                  setMessage(""); // Clear previous messages
-                  const originalText = "Subscribe";
-                  const button = document.activeElement as HTMLButtonElement;
-                  if (button) button.textContent = "Subscribing...";
-                  await handleSignUp();
-                  if (button) button.textContent = originalText;
-                }}
-                disabled={!!message || !email}
+                  className={`px-4 py-2 rounded-r-md transition-colors ${
+                    loading
+                      ? "bg-primary/80 text-primary-foreground"
+                      : "bg-primary text-primary-foreground hover:bg-primary/90"
+                  }`}
+                  onClick={async () => {
+                    setMessage(""); // Clear previous messages
+                    const originalText = "Subscribe";
+                    const button = document.activeElement as HTMLButtonElement;
+                    if (button) button.textContent = "Subscribing...";
+                    await handleSignUp();
+                    if (button) button.textContent = originalText;
+                  }}
+                  disabled={!!message || !email}
                 >
-                Subscribe
+                  Subscribe
                 </button>
               </div>
               {message && (
-              <p className={`mt-2 text-sm ${message.includes("Error") ? "text-destructive" : "text-green-500"} transition-opacity`}>
-                {message}
-              </p>
+                <p
+                  className={`mt-2 text-sm ${
+                    message.includes("Error")
+                      ? "text-destructive"
+                      : "text-green-500"
+                  } transition-opacity`}
+                >
+                  {message}
+                </p>
               )}
             </div>
           </div>
