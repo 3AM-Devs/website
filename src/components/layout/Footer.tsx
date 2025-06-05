@@ -174,12 +174,22 @@ const Footer: React.FC = () => {
                 className="bg-muted text-foreground rounded-l-md px-4 py-2 w-full focus:outline-none focus:ring-1 focus:ring-primary"
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <button
-                className="bg-primary text-primary-foreground px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors"
-                onClick={handleSignUp}
-              >
+                <button
+                className={`px-4 py-2 rounded-r-md transition-colors ${
+                  message ? "bg-primary/80 text-primary-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90"
+                }`}
+                onClick={async () => {
+                  setMessage(""); // Clear previous messages
+                  const originalText = "Subscribe";
+                  const button = document.activeElement as HTMLButtonElement;
+                  if (button) button.textContent = "Subscribing...";
+                  await handleSignUp();
+                  if (button) button.textContent = originalText;
+                }}
+                disabled={!!message || !email}
+                >
                 Subscribe
-              </button>
+                </button>
               </div>
               {message && (
               <p className={`mt-2 text-sm ${message.includes("Error") ? "text-destructive" : "text-green-500"} transition-opacity`}>
