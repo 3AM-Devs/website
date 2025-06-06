@@ -81,7 +81,22 @@ const Contact: React.FC = () => {
 
         <div className="bg-card rounded-lg border border-border p-6">
           <h3 className="text-xl font-medium mb-6">Send Us a Message</h3>
-          <form className="space-y-4">
+          <form
+            className="space-y-4"
+            action="https://api.web3forms.com/submit"
+            method="POST"
+          >
+            <input
+              type="hidden"
+              name="access_key"
+              value={import.meta.env.VITE_CONTACT_FORM_API_KEY}
+            />
+            <input
+              type="hidden"
+              name="subject"
+              value="New Contact Form Submission from Web3Forms"
+            />
+            <input type="hidden" name="from_name" value="My Website" />
             <div>
               <label
                 htmlFor="name"
@@ -92,6 +107,7 @@ const Contact: React.FC = () => {
               <input
                 type="text"
                 id="name"
+                name="name"
                 className="w-full px-4 py-2 bg-muted text-foreground rounded-md border border-input focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Your Name"
               />
@@ -107,6 +123,7 @@ const Contact: React.FC = () => {
               <input
                 type="email"
                 id="email"
+                name="email"
                 className="w-full px-4 py-2 bg-muted text-foreground rounded-md border border-input focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Email Address"
               />
@@ -122,6 +139,7 @@ const Contact: React.FC = () => {
               <input
                 type="text"
                 id="subject"
+                name="subject"
                 className="w-full px-4 py-2 bg-muted text-foreground rounded-md border border-input focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="How can we help you?"
               />
@@ -139,6 +157,7 @@ const Contact: React.FC = () => {
                 rows={4}
                 className="w-full px-4 py-2 bg-muted text-foreground rounded-md border border-input focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Your message here..."
+                name="message"
               ></textarea>
             </div>
 
