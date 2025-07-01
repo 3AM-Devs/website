@@ -1,9 +1,20 @@
 import { Mail, MapPin, Send } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../ui/Button";
 import Section from "../ui/Section";
 
 const Contact: React.FC = () => {
+  const [isDomain, setIsDomain] = useState<boolean>(true);
+
+  useEffect(() => {
+    const cutoffDate = new Date(2026, 5, 31);
+    const now = new Date();
+
+    if (now > cutoffDate) {
+      setIsDomain(false);
+    }
+  }, []);
+
   return (
     <Section
       id="contact"
@@ -32,7 +43,8 @@ const Contact: React.FC = () => {
             <div>
               <h3 className="text-lg font-medium mb-1">Email Us</h3>
               <p className="text-muted-foreground">
-                Support: 3amdevs@proton.me
+                Support:{" "}
+                {!isDomain ? "3amdevs@proton.me" : "contact@3amdevs.xyz"}
               </p>
             </div>
           </div>
