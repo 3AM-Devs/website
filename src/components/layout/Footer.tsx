@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
 
   const handleSignUp = async () => {
     try {
-      const response = await fetch("http://newsletter.3amdevs.xyz/", {
+      const response = await fetch("https://newsletter.3amdevs.xyz/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
