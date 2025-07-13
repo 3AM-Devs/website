@@ -3,41 +3,30 @@ import React, { useState } from "react";
 
 import Container from "../ui/Container.tsx";
 
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
-
-import { auth } from "../../types/firebaseConfig.ts";
-
 const Footer: React.FC = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const generateRandomPassword = (): string => {
-    const array = new Uint8Array(16);
-    crypto.getRandomValues(array);
-    return Array.from(array)
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  };
-
   const handleSignUp = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        generateRandomPassword()
-      );
-      await sendEmailVerification(userCredential.user);
-      setMessage("Verification email sent! Please check your inbox.");
-    } catch (error: any) {
-      if (error.message.includes("email-already-in-use")) {
-        setMessage(`Error: Email Already in use!`);
+      const response = await fetch("http://newsletter.3amdevs.xyz/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage(data.message);
       } else {
-        setMessage(`An Error Occurred: ${error.message || "Unknown error"}`);
+        setMessage(data.error);
       }
+    } catch (error) {
+      setMessage("Error: Network error. Please try again.");
     }
   };
   return (
